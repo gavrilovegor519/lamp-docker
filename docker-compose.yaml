@@ -1,0 +1,45 @@
+services:
+  webserver:
+    build:
+      context: .
+      args:
+        uid: ${UID}
+    container_name: "lamp-php"
+    restart: "always"
+    ports:
+      - "80:80"
+    links:
+      - database
+    volumes:
+      - ./www:/var/www/html
+  database:
+    image: mysql:8
+    container_name: "lamp-mysql"
+    restart: "always"
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: "lamp-phpmyadmin"
+    links:
+      - database
+    environment:
+      PMA_HOST: database
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "8080:80"
+
+volumes:
+  mysql-data:
