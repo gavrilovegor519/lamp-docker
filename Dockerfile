@@ -38,14 +38,9 @@ RUN apt-get update && \
     apt-get -y --no-install-recommends install --fix-missing libmagickwand-dev && \
     rm -rf /var/lib/apt/lists/*
 
-# Imagick Commit to install
-# https://github.com/Imagick/imagick
-ARG IMAGICK_COMMIT="28f27044e435a2b203e32675e942eb8de620ee58"
-
 RUN cd /usr/local/src && \
-    git clone https://github.com/Imagick/imagick && \
+    git clone https://github.com/Imagick/imagick --depth 1 && \
     cd imagick && \
-    git checkout ${IMAGICK_COMMIT} && \
     phpize && \
     ./configure && \
     make && \
