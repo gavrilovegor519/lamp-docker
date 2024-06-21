@@ -1,7 +1,7 @@
 FROM php:8.3-apache-bookworm
  
 ARG DEBIAN_FRONTEND=noninteractive
-ARG uid
+ARG uid=1000
 
 # Update
 RUN apt-get -y update --fix-missing && \
@@ -84,6 +84,3 @@ RUN a2enmod rewrite headers
 # Fix the permission problems
 RUN usermod -u ${uid} www-data \
     && groupmod -g ${uid} www-data;
-
-# Cleanup
-RUN rm -rf /usr/src/*
